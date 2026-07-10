@@ -51,6 +51,31 @@ npm run build && npm run start
 > Without SMTP configured, email orders are still stored server-side and can be
 > read from the admin panel; WhatsApp orders always work.
 
+## Deploy to Vercel
+
+This is a standard Next.js app and deploys to Vercel with zero config.
+
+1. Go to <https://vercel.com/new> and **import** `blouay83666-tech/glitch007`.
+2. Framework preset is auto-detected as **Next.js** — leave build settings default.
+3. Add the environment variables from `.env.example` in **Settings → Environment
+   Variables** (at minimum `ADMIN_PASSWORD`, `SESSION_SECRET`,
+   `NEXT_PUBLIC_WHATSAPP_NUMBER`, `NEXT_PUBLIC_STORE_EMAIL`).
+4. **Deploy.** Every push to the branch then redeploys automatically.
+
+CLI alternative:
+
+```bash
+npm i -g vercel
+vercel        # first deploy (links the project)
+vercel --prod # production deploy
+```
+
+> ⚠️ **Persistence on Vercel:** serverless functions have an ephemeral, read-only
+> filesystem, so products/orders added through the admin panel will **not**
+> persist across requests or deployments. The seed data in `data/store.json`
+> always renders, but for durable writes replace `src/lib/store.ts` with a
+> database (e.g. **Vercel KV**, **Vercel Postgres**, Supabase, or MongoDB).
+
 ## Data
 
 The store (products, categories, orders, slider) is a JSON file at
