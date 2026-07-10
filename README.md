@@ -76,9 +76,23 @@ vercel --prod # production deploy
 > always renders, but for durable writes replace `src/lib/store.ts` with a
 > database (e.g. **Vercel KV**, **Vercel Postgres**, Supabase, or MongoDB).
 
-## Data
+## Data & persistence
 
-The store (products, categories, orders, slider) is a JSON file at
-`data/store.json`. On serverless / read-only hosts, writes fall back to an
-in-memory copy for the running instance. For a permanent multi-instance setup,
-swap `src/lib/store.ts` for a database.
+The data layer (`src/lib/store.ts`) has two backends, chosen automatically:
+
+- **Supabase Postgres** — used when `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`
+  (or the `NEXT_PUBLIC_SUPABASE_*` fallbacks) are set. All products, categories,
+  orders and slides are stored durably. **This is what runs on Vercel.**
+- **Local JSON file** (`data/store.json`) — used when Supabase env vars are
+  absent, so `npm run dev` works with zero setup (not durable on serverless).
+
+### Supabase setup
+
+1. The schema + seed lives in [`supabase/migrations/0001_init.sql`](supabase/migrations/0001_init.sql).
+   With the **Supabase GitHub integration** it is applied automatically on push;
+   otherwise paste it into the Supabase **SQL Editor** and run it once.
+2. Make sure the Supabase env vars are present in Vercel (the **Vercel +
+   Supabase integration** adds them for you). The server uses the
+   **service-role key** only — it is never exposed to the browser.
+3. Tables have **RLS enabled with no public policies**: only the server
+   (service-role) can read/write, so the public anon key can't touch your data.

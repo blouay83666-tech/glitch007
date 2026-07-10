@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSlider, saveSlider } from "@/lib/store";
+import { getSlider, addSlide, deleteSlide } from "@/lib/store";
 import { sliderSchema } from "@/lib/validation";
 import { isAuthenticated } from "@/lib/auth";
 import type { SliderSlide } from "@/lib/types";
@@ -33,9 +33,14 @@ export async function POST(req: NextRequest) {
     title: parsed.data.title,
     subtitle: parsed.data.subtitle,
   };
-  const next = [...(await getSlider()), slide];
-  await saveSlider(next);
-  return NextResponse.json({ ok: true, slider: next });
+
+  try {
+    const slider = await addSlide(slide);
+    return NextResponse.json({ ok: true, slider });
+  } catch (err) {
+    console.error("slider: add failed", err);
+    return NextResponse.json({ ok: false, error: "Could not add slide." }, { status: 500 });
+  }
 }
 
 export async function DELETE(req: NextRequest) {
@@ -43,7 +48,13 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
   }
   const id = new URL(req.url).searchParams.get("id");
-  const next = (await getSlider()).filter((s) => s.id !== id);
-  await saveSlider(next);
-  return NextResponse.json({ ok: true, slider: next });
+  if (!id) return NextResponse.json({ ok: false, error: "Missing id." }, { status: 400 });
+
+  try {
+    const slider = await deleteSlide(id);
+    return NextResponse.json({ ok: true, slider });
+  } catch (err) {
+    console.error("slider: delete failed", err);
+    return NextResponse.json({ ok: false, error: "Could not delete slide." }, { status: 500 });
+  }
 }
