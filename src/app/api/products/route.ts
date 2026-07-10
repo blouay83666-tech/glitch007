@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getProducts, saveProducts } from "@/lib/store";
+import { getProducts, upsertProduct } from "@/lib/store";
 import { productSchema } from "@/lib/validation";
 import { isAuthenticated } from "@/lib/auth";
+import type { Product } from "@/lib/types";
 
 export const runtime = "nodejs";
 
@@ -29,19 +30,25 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const products = await getProducts();
   const input = parsed.data;
-  let saved;
+  const product: Product = {
+    id: input.id ?? Date.now(),
+    name: input.name,
+    category: input.category,
+    price: input.price,
+    oldPrice: input.oldPrice,
+    sizes: input.sizes,
+    colors: input.colors,
+    description: input.description,
+    images: input.images,
+    featured: input.featured,
+  };
 
-  if (input.id && products.some((p) => p.id === input.id)) {
-    // update existing
-    saved = { ...products.find((p) => p.id === input.id)!, ...input, id: input.id };
-    await saveProducts(products.map((p) => (p.id === input.id ? saved! : p)));
-  } else {
-    // create new
-    saved = { ...input, id: input.id ?? Date.now() };
-    await saveProducts([saved, ...products]);
+  try {
+    const saved = await upsertProduct(product);
+    return NextResponse.json({ ok: true, product: saved });
+  } catch (err) {
+    console.error("products: save failed", err);
+    return NextResponse.json({ ok: false, error: "Could not save product." }, { status: 500 });
   }
-
-  return NextResponse.json({ ok: true, product: saved });
 }

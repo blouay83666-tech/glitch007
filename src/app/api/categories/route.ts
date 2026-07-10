@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getCategories, saveCategories, getProducts } from "@/lib/store";
+import {
+  getCategories,
+  addCategory,
+  deleteCategory,
+  categoryExists,
+  categoryHasProducts,
+} from "@/lib/store";
 import { categorySchema } from "@/lib/validation";
 import { isAuthenticated } from "@/lib/auth";
 
@@ -26,14 +32,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "Invalid category." }, { status: 400 });
   }
 
-  const categories = await getCategories();
-  if (categories.some((c) => c.id === parsed.data.id)) {
+  if (await categoryExists(parsed.data.id)) {
     return NextResponse.json({ ok: false, error: "Category already exists." }, { status: 409 });
   }
 
-  const next = [...categories, parsed.data];
-  await saveCategories(next);
-  return NextResponse.json({ ok: true, categories: next });
+  try {
+    const categories = await addCategory(parsed.data);
+    return NextResponse.json({ ok: true, categories });
+  } catch (err) {
+    console.error("categories: add failed", err);
+    return NextResponse.json({ ok: false, error: "Could not add category." }, { status: 500 });
+  }
 }
 
 export async function DELETE(req: NextRequest) {
@@ -43,15 +52,18 @@ export async function DELETE(req: NextRequest) {
   const id = new URL(req.url).searchParams.get("id");
   if (!id) return NextResponse.json({ ok: false, error: "Missing id." }, { status: 400 });
 
-  const products = await getProducts();
-  if (products.some((p) => p.category === id)) {
+  if (await categoryHasProducts(id)) {
     return NextResponse.json(
       { ok: false, error: "Category still has products. Move or delete them first." },
       { status: 409 }
     );
   }
 
-  const categories = (await getCategories()).filter((c) => c.id !== id);
-  await saveCategories(categories);
-  return NextResponse.json({ ok: true, categories });
+  try {
+    const categories = await deleteCategory(id);
+    return NextResponse.json({ ok: true, categories });
+  } catch (err) {
+    console.error("categories: delete failed", err);
+    return NextResponse.json({ ok: false, error: "Could not delete category." }, { status: 500 });
+  }
 }
