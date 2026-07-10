@@ -1,0 +1,26 @@
+{
+  "categories": [
+    { "id": "tshirt", "name": "T-Shirts" },
+    { "id": "polo", "name": "Polos" },
+    { "id": "pant", "name": "Pants" },
+    { "id": "jorts", "name": "Jorts" },
+    { "id": "broderie", "name": "Broderie" }
+  ],
+  "products": [
+    { "id": 1, "name": "Glitch Cloud Tshirt OverSized", "category": "tshirt", "price": 3200, "oldPrice": 4500, "sizes": ["S", "M", "L", "XL"], "colors": ["Sky Blue", "Washed Black", "Vintage White", "Faded Grey", "Midnight Navy"], "description": "Premium heavy cloud-feel oversized streetwear tee.", "images": ["https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80"], "featured": true },
+    { "id": 2, "name": "Acid Wash Street OverSized Tee", "category": "tshirt", "price": 3800, "oldPrice": 4900, "sizes": ["M", "L", "XL", "XXL"], "colors": ["Acid Black", "Acid Grey", "Acid Olive"], "description": "Raw distressed vintage acid-wash treatment.", "images": ["https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=800&q=80"] },
+    { "id": 3, "name": "260 GSM Heavyweight OverSized Tee", "category": "tshirt", "price": 3500, "oldPrice": null, "sizes": ["M", "L", "XL"], "colors": ["Pure White"], "description": "Ultra-thick 260 GSM premium cotton structure.", "images": ["https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800&q=80"] },
+    { "id": 4, "name": "Neo-Street Boxy OverSized Tee", "category": "tshirt", "price": 2400, "oldPrice": 3200, "sizes": ["S", "M", "L", "XL", "XXL"], "colors": ["Pitch Black", "Off White", "Slate Grey"], "description": "The essential daily oversized tee.", "images": ["https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80"] },
+    { "id": 8, "name": "Wide Leg Summer Shorts", "category": "jorts", "price": 2800, "oldPrice": 3600, "sizes": ["M", "L", "XL"], "colors": ["Washed Grey", "Khaki"], "description": "Baggy wide-leg silhouette designed for summer airflow.", "images": ["https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=800&q=80"] },
+    { "id": 10, "name": "Haute Couture Half-Sleeve Polo", "category": "polo", "price": 2500, "oldPrice": 3200, "sizes": ["S", "M", "L", "XL"], "colors": ["Black", "White", "Navy", "Burgundy"], "description": "Smart-street tailored polo with structured collar.", "images": ["https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=800&q=80"], "featured": true },
+    { "id": 11, "name": "Baggy Jogger OverSized", "category": "pant", "price": 3400, "oldPrice": 4200, "sizes": ["S", "M", "L", "XL"], "colors": ["Black", "Charcoal"], "description": "Extreme baggy streetwear proportions.", "images": ["https://images.unsplash.com/photo-1517423568366-8b83523034fd?w=800&q=80"] },
+    { "id": 20, "name": "Signature Gold Broderie Tee", "category": "broderie", "price": 4200, "oldPrice": 5200, "sizes": ["S", "M", "L", "XL"], "colors": ["Black / Gold", "White / Gold"], "description": "Hand-finished gold embroidery (broderie) on premium heavyweight cotton.", "images": ["https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=800&q=80"], "featured": true },
+    { "id": 21, "name": "Heritage Broderie Hoodie", "category": "broderie", "price": 5600, "oldPrice": null, "sizes": ["M", "L", "XL", "XXL"], "colors": ["Cream", "Deep Black"], "description": "Detailed chest embroidery with a soft brushed interior.", "images": ["https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&q=80"] }
+  ],
+  "orders": [],
+  "slider": [
+    { "id": "s1", "image": "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=1600&q=80", "title": "THE GLITCHED SUIT", "subtitle": "Capsule // 01" },
+    { "id": "s2", "image": "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1600&q=80", "title": "NEO-STREET LUXURY", "subtitle": "Capsule // 02" },
+    { "id": "s3", "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1600&q=80", "title": "HAUTE COUTURE", "subtitle": "Capsule // 03" }
+  ]
+}
