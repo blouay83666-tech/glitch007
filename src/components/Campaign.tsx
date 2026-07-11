@@ -18,7 +18,7 @@ export default function Campaign({ slides }: { slides: SliderSlide[] }) {
   const slide = slides[idx];
 
   return (
-    <section className="relative h-[60vh] w-full overflow-hidden md:h-[75vh]">
+    <section className="relative h-[92svh] min-h-[560px] w-full overflow-hidden">
       <AnimatePresence mode="sync">
         <motion.div
           key={slide.id}

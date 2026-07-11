@@ -1,6 +1,6 @@
 import { getProducts, getCategories, getSlider } from "@/lib/store";
+import MusicProvider from "@/components/MusicProvider";
 import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
 import Campaign from "@/components/Campaign";
 import Storefront from "@/components/Storefront";
 import Footer from "@/components/Footer";
@@ -22,12 +22,12 @@ export default async function Home() {
   ]);
 
   return (
-    <main>
-      <Navbar />
-      <Hero />
-      <Campaign slides={slider} />
+    <MusicProvider>
+      <main>
+        <Navbar />
+        <Campaign slides={slider} />
 
-      {/* marquee stats */}
+        {/* marquee stats */}
       <section id="about" className="border-y border-neutral-900 bg-black py-10">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-8 px-6 md:grid-cols-4 md:px-8">
           {stats.map((s) => (
@@ -41,9 +41,10 @@ export default async function Home() {
         </div>
       </section>
 
-      <Storefront products={products} categories={categories} />
+        <Storefront products={products} categories={categories} />
 
-      <Footer />
-    </main>
+        <Footer />
+      </main>
+    </MusicProvider>
   );
 }

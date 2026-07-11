@@ -7,8 +7,11 @@ hero, a protected ordering flow (WhatsApp / email) and a sidebar admin panel.
 ## Features
 
 - **Modern UI/UX** — dark luxury theme, Framer Motion animations, responsive.
-- **3D hero** — animated gold "glitched" knot rendered with React Three Fiber
-  (`src/components/Scene3D.tsx`), plus a campaign image carousel.
+- **Hero slider** — full-screen campaign carousel (`src/components/Campaign.tsx`),
+  managed from the admin panel.
+- **Background music** — an "enter to play" overlay unlocks a looping soundtrack;
+  toggle it from the navbar (`src/components/MusicProvider.tsx`). Put your track at
+  `public/music.mp3` (or set `NEXT_PUBLIC_MUSIC_URL`).
 - **Ordering** — customers order in seconds via **WhatsApp** (a `wa.me` deep link
   is generated server-side) or **Email** (SMTP, optional). Every order is stored
   server-side and visible in the admin panel.

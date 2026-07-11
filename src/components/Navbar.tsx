@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ShoppingBag, Menu, X } from "lucide-react";
+import { ShoppingBag, Menu, X, Volume2, VolumeX } from "lucide-react";
+import { useMusic } from "./MusicProvider";
 
 const links = [
   { href: "#collections", label: "Collections" },
@@ -14,6 +15,7 @@ const links = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { playing, toggle } = useMusic();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -42,6 +44,23 @@ export default function Navbar() {
               {l.label}
             </a>
           ))}
+          <button
+            onClick={toggle}
+            aria-label={playing ? "Mute music" : "Play music"}
+            className="flex items-center gap-2 text-xs uppercase tracking-widest text-neutral-400 transition-colors hover:text-gold"
+          >
+            {playing ? (
+              <>
+                <span>Audio</span>
+                <Volume2 size={15} className="text-gold" />
+              </>
+            ) : (
+              <>
+                <span>Muted</span>
+                <VolumeX size={15} />
+              </>
+            )}
+          </button>
           <a
             href="#collections"
             className="flex items-center gap-2 rounded-full border border-gold/40 px-4 py-2 text-xs uppercase tracking-widest text-gold transition-all hover:bg-gold hover:text-black"
@@ -50,13 +69,22 @@ export default function Navbar() {
           </a>
         </div>
 
-        <button
-          className="text-white md:hidden"
-          onClick={() => setOpen((o) => !o)}
-          aria-label="Menu"
-        >
-          {open ? <X size={22} /> : <Menu size={22} />}
-        </button>
+        <div className="flex items-center gap-4 md:hidden">
+          <button
+            onClick={toggle}
+            aria-label={playing ? "Mute music" : "Play music"}
+            className="text-neutral-300 hover:text-gold"
+          >
+            {playing ? <Volume2 size={20} className="text-gold" /> : <VolumeX size={20} />}
+          </button>
+          <button
+            className="text-white"
+            onClick={() => setOpen((o) => !o)}
+            aria-label="Menu"
+          >
+            {open ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
       </div>
 
       {open && (
