@@ -42,7 +42,6 @@ export default function Footer() {
           <h4 className="mb-4 text-xs uppercase tracking-widest text-gold">House</h4>
           <div className="flex flex-col gap-3 text-sm text-neutral-400">
             <a href="#collections" className="transition-colors hover:text-gold">Collections</a>
-            <a href="#broderie" className="transition-colors hover:text-gold">Broderie line</a>
             <Link href="/admin" className="flex items-center gap-2 transition-colors hover:text-gold">
               <Lock size={13} /> Staff portal
             </Link>
