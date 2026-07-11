@@ -7,8 +7,6 @@ import { useMusic } from "./MusicProvider";
 
 const links = [
   { href: "#collections", label: "Collections" },
-  { href: "#broderie", label: "Broderie" },
-  { href: "#about", label: "The House" },
   { href: "#contact", label: "Contact" },
 ];
 

@@ -5,7 +5,6 @@ import { AnimatePresence } from "framer-motion";
 import type { Product, Category } from "@/lib/types";
 import ProductCard from "./ProductCard";
 import ProductModal from "./ProductModal";
-import BroderieSection from "./BroderieSection";
 
 export default function Storefront({
   products,
@@ -22,17 +21,10 @@ export default function Storefront({
     [active, products]
   );
 
-  const broderie = useMemo(
-    () => products.filter((p) => p.category === "broderie"),
-    [products]
-  );
-
   const categoryName = (id: string) => categories.find((c) => c.id === id)?.name || "Exclusive";
 
   return (
     <>
-      <BroderieSection products={broderie} onOpen={setSelected} />
-
       <section id="collections" className="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-24">
         <div className="mb-4 text-center">
           <span className="text-[11px] uppercase tracking-[0.4em] text-gold">The Collection</span>
