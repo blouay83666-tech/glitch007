@@ -1,7 +1,7 @@
 export const formatDA = (num: number): string =>
   new Intl.NumberFormat("en-DZ").format(num) + " DA";
 
-export const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "213600000000";
+export const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "213781605997";
 export const STORE_EMAIL = process.env.NEXT_PUBLIC_STORE_EMAIL || "blouay8366@gmail.com";
 
 interface OrderLike {

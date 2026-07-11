@@ -9,9 +9,9 @@ import {
   type ReactNode,
 } from "react";
 
-// Background music track. Drop your file at public/music.mp3, or override the
+// Background music track. Served from public/music.mp4, or override the
 // path with NEXT_PUBLIC_MUSIC_URL.
-const MUSIC_URL = process.env.NEXT_PUBLIC_MUSIC_URL || "/music.mp3";
+const MUSIC_URL = process.env.NEXT_PUBLIC_MUSIC_URL || "/music.mp4";
 
 interface MusicCtx {
   playing: boolean;

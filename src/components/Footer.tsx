@@ -32,8 +32,13 @@ export default function Footer() {
             >
               <Mail size={16} /> {STORE_EMAIL}
             </a>
-            <a href="#" className="flex items-center gap-3 transition-colors hover:text-gold">
-              <Instagram size={16} /> @glitch.2026
+            <a
+              href="https://instagram.com/glitch.007"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 transition-colors hover:text-gold"
+            >
+              <Instagram size={16} /> @glitch.007
             </a>
           </div>
         </div>
