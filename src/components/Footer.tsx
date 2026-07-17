@@ -33,12 +33,20 @@ export default function Footer() {
               <Mail size={16} /> {STORE_EMAIL}
             </a>
             <a
-              href="https://instagram.com/glitch.007"
+              href="https://instagram.com/glitch_club_007"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-3 transition-colors hover:text-gold"
             >
-              <Instagram size={16} /> @glitch.007
+              <Instagram size={16} /> @glitch_club_007
+            </a>
+            <a
+              href="https://www.tiktok.com/@.glitch007"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 transition-colors hover:text-gold"
+            >
+              <TikTokIcon size={16} /> @.glitch007
             </a>
           </div>
         </div>
@@ -58,5 +66,20 @@ export default function Footer() {
         &copy; 2026 GLITCH GLOBAL. ALL RIGHTS RESERVED.
       </div>
     </footer>
+  );
+}
+
+// lucide-react has no TikTok glyph, so we use an inline SVG matching the icon size.
+function TikTokIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M16.5 3c.3 2.2 1.6 3.6 3.7 3.8v2.4c-1.2.1-2.3-.2-3.6-.9v5.9c0 3.4-2.5 5.8-5.8 5.8-2.8 0-5.1-2-5.1-4.9 0-3 2.4-5 5.4-4.7v2.6c-.4-.1-.8-.2-1.2-.1-1.2.1-2 .9-1.9 2.1.1 1.1 1 1.9 2.1 1.8 1.3-.1 2-1 2-2.4V3h3.4z" />
+    </svg>
   );
 }
