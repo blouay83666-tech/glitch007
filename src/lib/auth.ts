@@ -4,12 +4,32 @@ import { cookies } from "next/headers";
 const COOKIE_NAME = "glitch_admin";
 const MAX_AGE = 60 * 60 * 8; // 8 hours
 
+// Ephemeral per-process secret used in production ONLY when SESSION_SECRET is
+// not configured. This guarantees we never sign admin cookies with a value that
+// is committed to the (public) repository — otherwise anyone could forge a
+// session and skip the login entirely.
+let runtimeSecret: string | null = null;
+
 function secret(): string {
-  return process.env.SESSION_SECRET || "glitch-dev-secret-change-me";
+  if (process.env.SESSION_SECRET) return process.env.SESSION_SECRET;
+  if (process.env.NODE_ENV !== "production") return "glitch-dev-secret-change-me";
+  if (!runtimeSecret) {
+    runtimeSecret = crypto.randomBytes(32).toString("hex");
+    console.error(
+      "auth: SESSION_SECRET is not set in production — using an ephemeral secret. " +
+        "Set SESSION_SECRET in your environment so admin sessions survive restarts."
+    );
+  }
+  return runtimeSecret;
 }
 
-function adminPassword(): string {
-  return process.env.ADMIN_PASSWORD || "louayben2026";
+// The admin password is read from the environment only. No real password is kept
+// in the source tree. In development a well-known value is accepted so
+// `npm run dev` works with zero setup; in production ADMIN_PASSWORD is required.
+const DEV_PASSWORD = "glitch-dev";
+
+function adminPassword(): string | null {
+  return process.env.ADMIN_PASSWORD || null;
 }
 
 // Signed token: <expiry>.<hmac(expiry)>
@@ -34,6 +54,11 @@ function verify(token: string | undefined): boolean {
 
 export function checkPassword(input: string): boolean {
   const expected = adminPassword();
+  if (!expected) {
+    if (process.env.NODE_ENV !== "production") return input === DEV_PASSWORD;
+    console.error("auth: ADMIN_PASSWORD is not set — refusing all admin logins.");
+    return false;
+  }
   const a = Buffer.from(input);
   const b = Buffer.from(expected);
   if (a.length !== b.length) return false;

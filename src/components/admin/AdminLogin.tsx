@@ -49,6 +49,8 @@ export default function AdminLogin() {
 
         <input
           type="password"
+          name="password"
+          autoComplete="current-password"
           autoFocus
           value={password}
           onChange={(e) => setPassword(e.target.value)}

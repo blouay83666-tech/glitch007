@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { deleteProduct } from "@/lib/store";
 import { isAuthenticated } from "@/lib/auth";
 
@@ -14,6 +15,7 @@ export async function DELETE(_req: Request, { params }: { params: { id: string }
   }
   try {
     await deleteProduct(id);
+    revalidatePath("/");
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("products: delete failed", err);

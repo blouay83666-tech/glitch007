@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import {
   getCategories,
   addCategory,
@@ -38,6 +39,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const categories = await addCategory(parsed.data);
+    revalidatePath("/");
     return NextResponse.json({ ok: true, categories });
   } catch (err) {
     console.error("categories: add failed", err);
@@ -61,6 +63,7 @@ export async function DELETE(req: NextRequest) {
 
   try {
     const categories = await deleteCategory(id);
+    revalidatePath("/");
     return NextResponse.json({ ok: true, categories });
   } catch (err) {
     console.error("categories: delete failed", err);

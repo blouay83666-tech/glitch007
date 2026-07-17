@@ -9,7 +9,13 @@ export async function sendOrderEmail(order: Order): Promise<boolean> {
   const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, ORDER_EMAIL_FROM, ORDER_EMAIL_TO } =
     process.env;
 
-  if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) return false;
+  if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) {
+    console.warn(
+      "email: SMTP not configured (SMTP_HOST/SMTP_USER/SMTP_PASS missing) — " +
+        "order was saved but no email was sent. Configure SMTP to receive orders by email."
+    );
+    return false;
+  }
 
   try {
     const transporter = nodemailer.createTransport({

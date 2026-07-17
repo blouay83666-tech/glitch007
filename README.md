@@ -45,14 +45,23 @@ npm run build && npm run start
 
 | Variable | Purpose |
 | --- | --- |
-| `ADMIN_PASSWORD` | Admin panel password (default `louayben2026`). |
-| `SESSION_SECRET` | Secret used to sign the admin session cookie. **Change it.** |
+| `ADMIN_PASSWORD` | Admin panel password. **Required in production** — pick your own strong secret. In development, if unset, the password is `glitch-dev`. |
+| `SESSION_SECRET` | Secret used to sign the admin session cookie. **Required in production** — a long random string. |
 | `NEXT_PUBLIC_WHATSAPP_NUMBER` | WhatsApp number that receives orders (digits only, no `+`). |
 | `NEXT_PUBLIC_STORE_EMAIL` | Contact email shown to customers. |
-| `SMTP_*`, `ORDER_EMAIL_*` | Optional — enable real email delivery of orders. |
+| `SMTP_*`, `ORDER_EMAIL_*` | Enable email delivery — **every** order is emailed to `ORDER_EMAIL_TO`. |
 
-> Without SMTP configured, email orders are still stored server-side and can be
-> read from the admin panel; WhatsApp orders always work.
+> **Security:** never commit a real `ADMIN_PASSWORD` or `SESSION_SECRET`. They
+> are read from the environment only. If `ADMIN_PASSWORD` is missing in
+> production the admin login is disabled until you set it.
+
+> **Receiving orders by email (Gmail):** set `SMTP_HOST=smtp.gmail.com`,
+> `SMTP_PORT=465`, `SMTP_USER`/`ORDER_EMAIL_TO` to your Gmail address, and
+> `SMTP_PASS` to a Google **App Password** (from
+> <https://myaccount.google.com/apppasswords> — 2-Step Verification must be on).
+> Your normal Gmail password will **not** work. Without SMTP configured, orders
+> are still stored server-side and readable in the admin panel; WhatsApp orders
+> always work.
 
 ## Deploy to Vercel
 
@@ -73,11 +82,13 @@ vercel        # first deploy (links the project)
 vercel --prod # production deploy
 ```
 
-> ⚠️ **Persistence on Vercel:** serverless functions have an ephemeral, read-only
-> filesystem, so products/orders added through the admin panel will **not**
-> persist across requests or deployments. The seed data in `data/store.json`
-> always renders, but for durable writes replace `src/lib/store.ts` with a
-> database (e.g. **Vercel KV**, **Vercel Postgres**, Supabase, or MongoDB).
+> ⚠️ **Persistence on Vercel requires Supabase.** Serverless functions have an
+> ephemeral, per-instance filesystem, so without a database, products/orders
+> added through the admin panel are **lost between requests and deploys** — this
+> is exactly why orders "disappear" and product edits don't show on the site.
+> Connect **Supabase** (see *Data & persistence* below) to store everything
+> durably. When it is **not** connected, the admin panel now shows a red warning
+> banner so you know writes aren't being saved.
 
 ## Data & persistence
 

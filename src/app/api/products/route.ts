@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { getProducts, upsertProduct } from "@/lib/store";
 import { productSchema } from "@/lib/validation";
 import { isAuthenticated } from "@/lib/auth";
@@ -46,6 +47,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const saved = await upsertProduct(product);
+    revalidatePath("/");
     return NextResponse.json({ ok: true, product: saved });
   } catch (err) {
     console.error("products: save failed", err);

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { getSlider, addSlide, deleteSlide } from "@/lib/store";
 import { sliderSchema } from "@/lib/validation";
 import { isAuthenticated } from "@/lib/auth";
@@ -36,6 +37,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const slider = await addSlide(slide);
+    revalidatePath("/");
     return NextResponse.json({ ok: true, slider });
   } catch (err) {
     console.error("slider: add failed", err);
@@ -52,6 +54,7 @@ export async function DELETE(req: NextRequest) {
 
   try {
     const slider = await deleteSlide(id);
+    revalidatePath("/");
     return NextResponse.json({ ok: true, slider });
   } catch (err) {
     console.error("slider: delete failed", err);

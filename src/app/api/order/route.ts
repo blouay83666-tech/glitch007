@@ -56,10 +56,9 @@ export async function POST(req: NextRequest) {
 
   await addOrder(order);
 
-  // Best-effort email; never blocks the customer flow.
-  if (data.channel === "email") {
-    void sendOrderEmail(order);
-  }
+  // Best-effort email notification to the store owner for EVERY order (WhatsApp
+  // or Email), so a copy always lands in the inbox. Never blocks the customer.
+  void sendOrderEmail(order);
 
   const whatsappUrl = data.channel === "whatsapp" ? buildWhatsappUrl(order) : null;
 
