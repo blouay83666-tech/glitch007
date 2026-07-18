@@ -64,28 +64,47 @@ Now every order (WhatsApp **and** Email) lands in your inbox.
 
 ---
 
-## Part 3 — Stop orders/products from disappearing (10 minutes)
+## Part 3 — Stop orders/products from disappearing (THE important one)
 
-This connects a real database (Supabase) so nothing gets wiped. It's free.
+**Why products don't appear on the site:** without a database, when you add a
+product the hosting server saves it only in its own temporary memory. The public
+website runs on a *different* server that never sees it — so the product never
+shows up, and orders vanish the same way. The fix is to connect one shared
+database (Supabase). It's free. Once connected, everything you add in the admin
+panel shows on the site and stays forever.
+
+### Easiest way — Vercel's one-click Supabase integration (recommended)
+
+1. In **Vercel**, open your **glitch007** project → **Storage** tab (top menu).
+2. Click **Create Database** → choose **Supabase** → **Continue**.
+3. Follow the prompts (sign in / create a free Supabase account when asked, pick a
+   region close to you) → **Connect**.
+4. Vercel automatically adds the Supabase keys to your project for you — you don't
+   have to copy anything by hand. ✅
+5. **Load your products into the new database:** open the Supabase project
+   (there's a link from the Vercel Storage tab), click **SQL Editor** →
+   **New query**, then copy **all** of the file
+   `supabase/migrations/0001_init.sql` from this repo, paste it in, and click
+   **Run**. You should see "Success".
+
+### Manual way (if you prefer, or the integration isn't available)
 
 1. Go to **supabase.com** → sign up / log in → **New project**. Give it any name,
-   set a database password (save it somewhere), pick the closest region →
-   **Create**. Wait ~2 minutes for it to finish.
-2. In your new Supabase project, click **SQL Editor** (left menu) → **New query**.
-3. Open the file `supabase/migrations/0001_init.sql` from this repo and copy
-   **all** of it. Paste it into the SQL box → click **Run**. This builds your
-   tables and loads your products. You should see "Success".
-4. Get your keys: click **Settings** (gear icon) → **API**. You'll see:
+   set a database password (save it), pick the closest region → **Create**. Wait
+   ~2 minutes.
+2. **SQL Editor** → **New query** → paste all of
+   `supabase/migrations/0001_init.sql` → **Run**.
+3. **Settings** (gear icon) → **API**, copy:
    - **Project URL** — looks like `https://xxxx.supabase.co`
-   - **service_role** key — under "Project API keys" (click reveal/copy; long string)
-5. Back in **Vercel** → Settings → Environment Variables, add:
+   - **service_role** key — under "Project API keys" (reveal/copy; long string)
+4. In **Vercel** → Settings → Environment Variables, add:
 
-| Name | Value |
-| --- | --- |
-| `SUPABASE_URL` | The Project URL |
-| `SUPABASE_SERVICE_ROLE_KEY` | The **service_role** key |
+   | Name | Value |
+   | --- | --- |
+   | `SUPABASE_URL` | The Project URL |
+   | `SUPABASE_SERVICE_ROLE_KEY` | The **service_role** key |
 
-> ⚠️ Use the **service_role** key, not the "anon" one.
+   > ⚠️ Use the **service_role** key, not the "anon" one.
 
 ---
 
