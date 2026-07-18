@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { X, MessageCircle, Mail, Loader2, CheckCircle2 } from "lucide-react";
+import { X, MessageCircle, Mail, Loader2, CheckCircle2, ShoppingBag } from "lucide-react";
 import type { Product } from "@/lib/types";
 import { formatDA } from "@/lib/format";
+import { useCart } from "./cart/CartProvider";
 
 type Channel = "whatsapp" | "email";
 
@@ -29,6 +30,20 @@ export default function ProductModal({
   const [company, setCompany] = useState(""); // honeypot
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [error, setError] = useState("");
+  const { addItem } = useCart();
+
+  function addToCart() {
+    if (!product) return;
+    addItem({
+      productId: product.id,
+      name: product.name,
+      price: product.price,
+      color,
+      size,
+      image: product.images?.[0] || "",
+    });
+    onClose();
+  }
 
   useEffect(() => {
     if (product) {
@@ -168,12 +183,20 @@ export default function ProductModal({
               <Selector label="Size" options={product.sizes} value={size} onChange={setSize} />
 
               {!showForm && status !== "done" && (
-                <button
-                  onClick={() => setShowForm(true)}
-                  className="mt-4 w-full rounded-full bg-white py-3.5 text-xs font-semibold uppercase tracking-widest text-black transition-all hover:bg-gold"
-                >
-                  Order now
-                </button>
+                <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  <button
+                    onClick={addToCart}
+                    className="flex items-center justify-center gap-2 rounded-full border border-gold/50 py-3.5 text-xs font-semibold uppercase tracking-widest text-gold transition-all hover:bg-gold hover:text-black"
+                  >
+                    <ShoppingBag size={14} /> Add to cart
+                  </button>
+                  <button
+                    onClick={() => setShowForm(true)}
+                    className="rounded-full bg-white py-3.5 text-xs font-semibold uppercase tracking-widest text-black transition-all hover:bg-gold"
+                  >
+                    Order now
+                  </button>
+                </div>
               )}
 
               {showForm && status !== "done" && (

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ShoppingBag, Menu, X, Volume2, VolumeX } from "lucide-react";
 import { useMusic } from "./MusicProvider";
+import { useCart } from "./cart/CartProvider";
 
 const links = [
   { href: "#collections", label: "Collections" },
@@ -14,6 +15,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { playing, toggle } = useMusic();
+  const { count, open: openCart } = useCart();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -59,12 +61,7 @@ export default function Navbar() {
               </>
             )}
           </button>
-          <a
-            href="#collections"
-            className="flex items-center gap-2 rounded-full border border-gold/40 px-4 py-2 text-xs uppercase tracking-widest text-gold transition-all hover:bg-gold hover:text-black"
-          >
-            <ShoppingBag size={14} /> Shop
-          </a>
+          <CartButton count={count} onClick={openCart} />
         </div>
 
         <div className="flex items-center gap-4 md:hidden">
@@ -75,6 +72,7 @@ export default function Navbar() {
           >
             {playing ? <Volume2 size={20} className="text-gold" /> : <VolumeX size={20} />}
           </button>
+          <CartButton count={count} onClick={openCart} />
           <button
             className="text-white"
             onClick={() => setOpen((o) => !o)}
@@ -85,6 +83,7 @@ export default function Navbar() {
         </div>
       </div>
 
+      {/* mobile menu */}
       {open && (
         <div className="mt-4 flex flex-col gap-4 border-t border-neutral-900 pt-4 md:hidden">
           {links.map((l) => (
@@ -100,5 +99,23 @@ export default function Navbar() {
         </div>
       )}
     </nav>
+  );
+}
+
+function CartButton({ count, onClick }: { count: number; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      aria-label="Open cart"
+      className="relative flex items-center gap-2 rounded-full border border-gold/40 px-3 py-2 text-xs uppercase tracking-widest text-gold transition-all hover:bg-gold hover:text-black md:px-4"
+    >
+      <ShoppingBag size={14} />
+      <span className="hidden md:inline">Cart</span>
+      {count > 0 && (
+        <span className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-gold px-1 text-[10px] font-bold text-black">
+          {count}
+        </span>
+      )}
+    </button>
   );
 }

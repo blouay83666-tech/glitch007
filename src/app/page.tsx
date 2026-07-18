@@ -1,5 +1,7 @@
 import { getProducts, getCategories, getSlider } from "@/lib/store";
 import MusicProvider from "@/components/MusicProvider";
+import CartProvider from "@/components/cart/CartProvider";
+import CartDrawer from "@/components/cart/CartDrawer";
 import Navbar from "@/components/Navbar";
 import Campaign from "@/components/Campaign";
 import Storefront from "@/components/Storefront";
@@ -16,14 +18,17 @@ export default async function Home() {
 
   return (
     <MusicProvider>
-      <main>
-        <Navbar />
-        <Campaign slides={slider} />
+      <CartProvider>
+        <main>
+          <Navbar />
+          <Campaign slides={slider} />
 
-        <Storefront products={products} categories={categories} />
+          <Storefront products={products} categories={categories} />
 
-        <Footer />
-      </main>
+          <Footer />
+        </main>
+        <CartDrawer />
+      </CartProvider>
     </MusicProvider>
   );
 }

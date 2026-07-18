@@ -20,7 +20,8 @@ export const orderSchema = z.object({
     .regex(/^[0-9+\s().-]+$/, "Invalid phone number"),
   wilaya: z.string().trim().max(60).optional().default(""),
   address: z.string().trim().max(200).optional().default(""),
-  product: cleanString(120),
+  // Long enough to hold a multi-item cart summary (one line per product).
+  product: cleanString(4000),
   color: z.string().trim().max(60).default("N/A"),
   size: z.string().trim().max(20).default("N/A"),
   price: z.number().int().nonnegative().max(10_000_000),

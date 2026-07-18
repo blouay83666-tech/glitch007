@@ -25,12 +25,16 @@ export async function sendOrderEmail(order: Order): Promise<boolean> {
       auth: { user: SMTP_USER, pass: SMTP_PASS },
     });
 
+    // Cart orders put one item per line in `product`; convert newlines to <br>
+    // so the itemised list renders across lines in the email.
+    const productHtml = order.product.replace(/\n/g, "<br>");
+
     const rows: [string, string][] = [
       ["Customer", order.customer],
       ["Phone", order.phone],
       ["Wilaya", order.wilaya || "-"],
       ["Address", order.address || "-"],
-      ["Product", order.product],
+      ["Product", productHtml],
       ["Color", order.color],
       ["Size", order.size],
       ["Total", formatDA(order.price)],

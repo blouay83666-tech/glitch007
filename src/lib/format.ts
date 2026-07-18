@@ -25,8 +25,10 @@ export function buildWhatsappMessage(o: OrderLike): string {
     o.address ? `🏠 Address: ${o.address}` : "",
     "",
     `👕 Product: ${o.product}`,
-    `🎨 Color: ${o.color}`,
-    `📏 Size: ${o.size}`,
+    // Cart orders carry per-item color/size in the product list, so a single
+    // "—" placeholder is skipped here to avoid noise.
+    o.color && o.color !== "—" ? `🎨 Color: ${o.color}` : "",
+    o.size && o.size !== "—" ? `📏 Size: ${o.size}` : "",
     `💰 Total: ${formatDA(o.price)}`,
   ].filter(Boolean);
   return lines.join("\n");
