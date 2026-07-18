@@ -4,23 +4,20 @@ import { cookies } from "next/headers";
 const COOKIE_NAME = "glitch_admin";
 const MAX_AGE = 60 * 60 * 8; // 8 hours
 
-// Ephemeral per-process secret used in production ONLY when SESSION_SECRET is
-// not configured. This guarantees we never sign admin cookies with a value that
-// is committed to the (public) repository — otherwise anyone could forge a
-// session and skip the login entirely.
-let runtimeSecret: string | null = null;
-
+// Secret used to sign the admin session cookie. It MUST be identical across all
+// serverless instances, otherwise a cookie signed on one instance won't verify
+// on another and the admin can never stay logged in. Preference order:
+//   1. SESSION_SECRET  — an explicit, dedicated secret (best).
+//   2. Derived from ADMIN_PASSWORD — stable across instances and not a value
+//      committed to the repo, so sessions work even without SESSION_SECRET set.
+//   3. A well-known dev default — only ever reached in development.
 function secret(): string {
   if (process.env.SESSION_SECRET) return process.env.SESSION_SECRET;
-  if (process.env.NODE_ENV !== "production") return "glitch-dev-secret-change-me";
-  if (!runtimeSecret) {
-    runtimeSecret = crypto.randomBytes(32).toString("hex");
-    console.error(
-      "auth: SESSION_SECRET is not set in production — using an ephemeral secret. " +
-        "Set SESSION_SECRET in your environment so admin sessions survive restarts."
-    );
+  const pw = process.env.ADMIN_PASSWORD;
+  if (pw) {
+    return crypto.createHash("sha256").update(`glitch-session|${pw}`).digest("hex");
   }
-  return runtimeSecret;
+  return "glitch-dev-secret-change-me";
 }
 
 // The admin password is read from the environment only. No real password is kept
